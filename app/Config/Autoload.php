@@ -38,7 +38,7 @@ class Autoload extends AutoloadConfig
      * @var array<string, list<string>|string>
      */
     public $psr4 = [
-        APP_NAMESPACE => APPPATH,
+        APP_NAMESPACE => APPPATH
     ];
 
     /**
@@ -75,7 +75,10 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $files = [];
+    public $files = [
+        'app/Controllers/UserController.php',
+        'app/Models/UserModel.php',
+    ];
 
     /**
      * -------------------------------------------------------------------
