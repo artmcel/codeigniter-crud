@@ -1,0 +1,12 @@
+{
+    "name": "paynalton/migration",
+    "authors": [
+        {
+            "name": "paynalton",
+            "email": "pay@soigital.mx"
+        }
+    ],
+    "require": {
+        "illuminate/database": "^8.58"
+    }
+}
