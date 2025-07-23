@@ -1,0 +1,62 @@
+services:
+
+  migration:
+    build: ./src/Migration
+    environment:
+      DB_HOST: db
+      DB_DATABASE: prueba
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: prueba
+      DB_CONNECTION: mysql
+      DB_CHARSET: utf8mb4
+      DB_COLLATION: utf8mb4_unicode_ci
+    volumes:
+      - "./src/Migration/src:/usr/local/migration"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Mantener el contenedor activo
+    command: tail -f /dev/null
+    # O ejecutar las migraciones automáticamente:
+    # command: php /usr/local/migration/run.php --fresh --seed
+
+  db:
+    image: mariadb:10.5.12
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: prueba
+      MYSQL_DATABASE: prueba
+      MYSQL_USER: root
+      MYSQL_PASSWORD: prueba
+    ports:
+      - "3307:3306"
+    volumes:
+      - "db-data2:/var/lib/mysql"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 30s
+
+  frontend:
+    build: ./src/frontend
+    environment:
+      DB_HOST: db
+      DB_DATABASE: prueba
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: prueba
+      DB_CONNECTION: mysql
+      DB_CHARSET: utf8mb4
+      DB_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3090:80"
+    volumes:
+      - ./src/frontend/src:/var/www
+    depends_on:
+      - db
+
+volumes:
+  db-data2:
