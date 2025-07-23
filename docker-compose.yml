@@ -1,12 +1,10 @@
 services:
   frontend:
-    build:
-      context: ./frontend/src
-      dockerfile: Dockerfile
+    build: ./src/frontend
     ports:
-      - "80:80"
+      - "3090:80"
     volumes:
-      - ./frontend/src:/var/www/html
+      - ./src/frontend/src:/var/www
     depends_on:
       - db
 
@@ -23,4 +21,3 @@ services:
 
 volumes:
   db_data:
-    driver: local
