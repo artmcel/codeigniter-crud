@@ -35,12 +35,13 @@ RUN a2enmod rewrite
 
 # Copia el código de la aplicación
 COPY ./src /var/www
-#COPY .deploy/config/env /var/www/.env
+COPY .deploy/config/env /var/www/.env
 
 # Ajusta permisos
-RUN chown -R www-data:www-data /var/www/html \
-    && find /var/www/html -type d -exec chmod 755 {} \; \
-    && find /var/www/html -type f -exec chmod 644 {} \;
+RUN chown -R www-data:www-data /var/www \
+    && chown www-data:www-data -R /var/www/writable \
+    && find /var/www -type d -exec chmod 755 {} \; \
+    && find /var/www -type f -exec chmod 644 {} \;
 
 RUN rm -rf vendor
 RUN rm -rf node_modules
